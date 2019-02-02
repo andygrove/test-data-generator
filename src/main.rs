@@ -1,6 +1,5 @@
 use std::error::Error;
 use std::io;
-use std::process;
 use std::result::Result;
 use rand::{thread_rng, Rng};
 use rand::distributions::Alphanumeric;
@@ -21,9 +20,14 @@ fn gen_aggregate_data() -> Result<(), Box<Error>> {
     let c2_values = vec![1, 2, 3, 4, 5];
 
 
-    let mut row: Vec<String> = vec![];
+    let mut header: Vec<String> = vec![];
+    for i in 1..=13 {
+        header.push(format!("c{}", i));
+    }
+    wtr.write_record(&header)?;
 
-    for _ in 0..1000 {
+    let mut row: Vec<String> = vec![];
+    for _ in 0..100 {
 
         let rand_string: String = thread_rng()
             .sample_iter(&Alphanumeric)
@@ -31,19 +35,19 @@ fn gen_aggregate_data() -> Result<(), Box<Error>> {
             .collect();
 
         row.clear();
-        row.push(c1_values[rng.gen::<usize>() % c1_values.len()].to_string());
-        row.push(format!("{}", c2_values[rng.gen::<usize>() % c1_values.len()]));
-        row.push(format!("{}", rng.gen::<i8>()));
-        row.push(format!("{}", rng.gen::<i16>()));
-        row.push(format!("{}", rng.gen::<i32>()));
-        row.push(format!("{}", rng.gen::<i64>()));
-        row.push(format!("{}", rng.gen::<u8>()));
-        row.push(format!("{}", rng.gen::<u16>()));
-        row.push(format!("{}", rng.gen::<u32>()));
-        row.push(format!("{}", rng.gen::<u64>()));
-        row.push(format!("{}", rng.gen::<f32>()));
-        row.push(format!("{}", rng.gen::<f64>()));
-        row.push(rand_string);
+        row.push(c1_values[rng.gen::<usize>() % c1_values.len()].to_string()); //c1
+        row.push(format!("{}", c2_values[rng.gen::<usize>() % c1_values.len()])); //c2
+        row.push(format!("{}", rng.gen::<i8>())); // c3
+        row.push(format!("{}", rng.gen::<i16>())); // c4
+        row.push(format!("{}", rng.gen::<i32>())); // c5
+        row.push(format!("{}", rng.gen::<i64>())); // c6
+        row.push(format!("{}", rng.gen::<u8>()));  // c7
+        row.push(format!("{}", rng.gen::<u16>())); // c8
+        row.push(format!("{}", rng.gen::<u32>())); // c9
+        row.push(format!("{}", rng.gen::<u64>()));  // c10
+        row.push(format!("{}", rng.gen::<f32>())); //c11
+        row.push(format!("{}", rng.gen::<f64>())); //c12
+        row.push(rand_string); //c13
 
         wtr.write_record(&row)?;
     }
